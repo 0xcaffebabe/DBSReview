@@ -134,3 +134,67 @@ money >= 9000 AND money <= 10000
 ```
 NOT BETWEEN ... AND ...
 上面的取反
+## 集合运算
+### 并运算
+UNION关键字
+```sql
+SELECT name FROM student WHERE age = 15
+UNION
+SELECT name FROM student WHERE age = 16
+```
+### 交运算
+INTERSECT关键字
+用法同上
+### 差运算
+EXCEPT 关键字
+同上
+## 空值
+- IS NULL 判断是空值
+- IS NOT NULL 判断非空
+## 聚集函数
+- AVG:求平均值
+- MIN:求最小值
+- MAX:求最大值
+- SUM:求和
+- COUNT:计数
+### 分组聚集
+GROUP BY 子句：
+根据后面的列进行分组
+```sql
+select TO_DAYS(create_time),COUNT(1) 
+FROM web_log GROUP BY TO_DAYS(create_time)
+# 查询每天的访问次数
+```
+### HAVING子句
+满足HAVING后的条件才会被选择
+```sql
+select TO_DAYS(create_time),COUNT(1) 
+FROM web_log GROUP BY TO_DAYS(create_time) HAVING COUNT(1)>1000
+# 查询访问次数1000的那些天
+```
+## 嵌套子查询
+```sql
+SELECT username FROM user WHERE user_id IN 
+(SELECT user FROM state);
+# 查询发表过动态的用户
+```
+### 集合比较
+- some:某一些满足即可
+- all：全部满足
+```sql
+SELECT username FROM user
+WHERE age > all 
+(SELECT age FROM user WHERE sex = '女')
+# 查询出年龄大于全部女性年龄的用户
+```
+### 空关系测试
+EXIST 关键字：
+当改关键字后面的关系非空时返回true，反之返回false
+相关子查询：
+```sql
+SELECT user_id FROM user 
+WHERE EXISTS (SELECT * FROM state WHERE user = user_id);
+# 查询发表过动态的用户ID
+```
+### 重复元组存在性测试
+
