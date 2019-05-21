@@ -14,4 +14,71 @@ SELECT * FROM user,user_info
 WHERE user.user_info = user_info.user_info_id
 ```
 ### 外连接
-- 左外连接：只保留
+- 左外连接：只保留出现在左外连接左边的关系中的元组
+- 右外连接：只保留出现在右外连接运算右边关系中的元组
+- 全外连接：保留出现在两个关系中的元组
+左外连接：
+```sql
+select * from user  
+left outer join state on user.user_id = state.user;
+# 把user和state进行连接，如果用户没有发表state，则仍保留用户，只是state相关列为NULL
+```
+右外连接如上取反
+全外连接：原理同上，不详细解释（mysql不支持）
+### 连接类型和条件
+natural join等价于natural inner join
+## 视图
+定义：不是逻辑模型的一部分，但是作为虚关系对用户可见
+### 视图定义
+```sql
+CREATE VIEW v AS <查询表达式>
+```
+创建一个部分用户视图：
+```sql
+CREATE VIEW user_part 
+AS
+SELECT * FROM user LIMIT 10
+```
+### SQL查询中使用视图
+再查询中，视图能出现在关系名可以出现的任何地方
+```sql
+SELECT * FROM user_part
+```
+### 物化视图
+如果用于定义视图的实际关系改变，视图也跟着修改。这样的视图称为物化视图
+### 视图更新
+一般来说，满足下列所有条件，则视图是可更新的
+- FROM子句中只有一个数据库关系
+- SELECT子句只包含关系的属性名，不包含任何表达式聚集或DISTINCT声明
+- 没有出现在SELECT子句中的属性可以去空值，也不是主码的一部分
+- 查询中没有GROUP BY 和HAVING子句
+## 事务
+定义：事务内的所有语句要么全部执行，要么全部不执行
+- Commit work:提交当前事务
+- Rollback work：回滚当前事务
+## 完整性约束
+完整性约束防止的是对数据的意外破坏。
+### 单个关系上的约束
+### NOT NULL约束
+```sql
+ CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `user_info` int(11) NOT NULL,
+  `permission` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime NOT NULL,
+  `last_login` datetime DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=293 DEFAULT CHARSET=utf8
+```
+表示禁止在该属性上插入NULL值
+### UNIQUE 约束
+被该约束修饰的属性在单个关系上是唯一的，由于NULL != NULL ，所以一个关系上允许存在多个NULL值
+### CHECK 子句
+check(p) 指定一个谓词P，只有当该谓词满足时，数据库才允许插入
+### 参照完整性
+
+
