@@ -197,4 +197,52 @@ WHERE EXISTS (SELECT * FROM state WHERE user = user_id);
 # 查询发表过动态的用户ID
 ```
 ### 重复元组存在性测试
+UNIQUE 关键字：
+查询是否存在重复的元组
+### FROM子句中的子查询
+```sql
+SELECT * FROM (SELECT username FROM user) AS T;
+# 使用FROM子句子查询，有些数据库要求FROM后面的子查询需要指定一个别名
+```
+### WITH子句
+提供定义临时关系的方法
+### 标量子查询
+如果一个子查询的结果只有一个元组，那么可以放在单个值能出现的任何地方：
+```sql
+SELECT username,(SELECT COUNT(1) 
+FROM state WHERE state.user = user.user_id) FROM user;
+# 查询每个用户的用户名及其发表的动态条数
+```
+## 数据库的修改
+### 删除
+```sql
+DELETE FROM r
+WHERE p
+```
+示例:
+```sql
+DELETE FROM user
+WHERE username = 'root'
+# 删除用户名为root的用户
+```
+### 插入
+```sql
+INSERT INTO user VALUES(1,'username',15);
+# 这种方式需要指定全部列
+INSERT INTO user(username,age) VALUES('username',15);
+# 这种方式不需要指定全部列
+INSERT INTO user SELECT * FROM user;
+# 插入查询出来的元组
+```
+### 更新
+```sql
+UPDATE r
+SET k1=v1,k2=v2,...,kn=vn
+WHERE p
+```
+```sql
+UPDATE user
+SET username = 'abc'
+WHERE username = 'root'
+```
 
