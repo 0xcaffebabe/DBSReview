@@ -80,5 +80,80 @@ SELECT * FROM user_part
 ### CHECK 子句
 check(p) 指定一个谓词P，只有当该谓词满足时，数据库才允许插入
 ### 参照完整性
-
+一个关系中给定属性集上的取值在另一关系的特定属性集的取值中出现，这种情况称为参照完整性
+```sql
+CREATE TABLE test(
+user_id INT,
+FOREIGN KEY (user_id) REFERENCES user(user_id)
+);
+```
+test表中的user_id参照user表的user_id
+### 事务中对完整性约束的违反
+如果事务中的某条SQL语句违反了完整性约束，则会马上进行检查。有些DBS支持将initially deferred加入到约束中，这样完整性约束检查就会在事务结束的时候进行。
+### 复杂CHECK条件与断言
+比如CHECK后面的谓词可以使用子查询：
+```sql
+CREATE TABLE test(
+user_id INT 
+CHECK(user_id IN( SELECT user.user_id FROM user))
+)
+```
+这样在插入test表时，只有在user表中出现的user_id才被允许插入，但是大多数数据库还不支持
+断言：
+```sql
+CREATE ASSERTION <name> CHECK <p>
+```
+任何在断言中涉及到的关系发生变动，都会触发断言。
+## SQL中的数据类型与模式
+### SQL中的日期和时间类型
+- DATE:日历日期，包括年月日
+- TIME :一天中的时间
+- TIMESTAMP ：DATE+TIME
+#### 与时间相关的函数：
+- CURRENT_DATE：返回当前日期
+- CURRENT_TIME：返回当前时间
+### 默认值
+如
+```sql
+CREATE TABLE test(
+  user_id INT DEFAULT 0
+);
+```
+当user_id未指定时，默认为0
+### 创建索引
+```sql
+CREATE INDEX index_1 ON test(id)
+```
+### 大对象类型
+- BLOB
+- CLOB
+### 用户定义的类型
+### CREATE TABLE 的扩展
+创建两个模式相同的表：
+```sql
+CREATE TABLE test1 LIKE test
+```
+从查询中创建表：
+```sql
+CREATE TABLE test2 AS 
+(
+SELECT * FROM test
+)
+WITH DATA;
+# mysql不支持
+```
+### 模式、目录与环境
+当代数据库提供了三层结构的关系命名机制，最顶层由**目录**构成，每个目录当中可以包含**模式**，目录 == 数据库。
+默认目录和模式是为每个连接建立的SQL环境的一部分。
+## 授权
+- 授权读取
+- 授权插入
+- 授权更新
+- 授权删除
+### 权限的授予与收回
+```sql
+GRANT <权限列表>
+ON <关系或视图>
+TO <用户或角色列表>
+```
 
