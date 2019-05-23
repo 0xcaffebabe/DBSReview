@@ -156,4 +156,41 @@ GRANT <权限列表>
 ON <关系或视图>
 TO <用户或角色列表>
 ```
+```sql
+GRANT SELECT ON department TO user1
+# 授予user1查询department表的权限
+```
+public:代表当前系统的所有用户以及未来用户
+```sql
+REVOKE <权限列表>
+ON <关系名或视图名>
+FROM <用户/角色列表>
+```
+```sql
+REVOKE SELECT ON department FROM user1
+# 收回user1的查询权限
+```
+### 角色
+创建角色：
+```sql
+CREATE ROLE <角色名>
+```
+```sql
+GRANT admin to user1;
+# 将admin角色授予user1
+```
+### 视图的授权
+同上
+### 模式的授权
+```sql
+GRANT REFERENCES (dept_name) ON department TO user1
+# 允许user1创建这样的关系：它能参照department的dept_name
+```
+### 权限的转移
+在授权语句最后加上 WITH GRANT OPTION
+即允许用户可将权限授予给其他用户
+### 权限的收回
+默认情况下，多数DBS都会级联收回用户的权限
+如果在收回语句最后加上 RESTRICT关键字，可以防止级联收回
+
 
