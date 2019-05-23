@@ -65,23 +65,28 @@ WHERE P
 ```
 笛卡尔积：
 表1：
+
 name|age
 ----|----
 小明|15
 小红|16
+
 表2：
+
 grade|school
 ----|----
 5|中心小学
 6|中心小学
 
 两张表的笛卡尔积是：
+
 name|age|grade|school
 ----|----|----|----
 小明|15|5|中心小学
 小红|16|6|中心小学
 小明|15|6|中心小学
 小红|16|5|中心小学
+
 ### 自然连接
 ```sql
 SELECT name,instructor.dept_name,building
